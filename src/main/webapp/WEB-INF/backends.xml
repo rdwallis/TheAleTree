@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<backends>
+	<backend name="rank">
+		<class>B1</class>
+		<options>
+     		<dynamic>true</dynamic>
+   		</options>
+	</backend>
+</backends>

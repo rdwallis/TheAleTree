@@ -1,0 +1,43 @@
+<taglib>
+  <tlib-version>1.0</tlib-version>
+  <jsp-version>2.0</jsp-version>
+  <short-name>Example TLD</short-name>
+  <tag>
+    <name>DisclosureTag</name>
+    <tag-class>com.wallissoftware.ale.tags.DisclosureTag</tag-class>
+    <body-content>scriptless</body-content>
+    <attribute>
+       <name>href</name>
+       <required>true</required>
+       <type>java.lang.String</type>
+       <fragment>false</fragment>
+       <rtexprvalue>true</rtexprvalue>  
+    </attribute>
+    <attribute>
+       <name>text</name>
+       <required>true</required>
+       <type>java.lang.String</type>
+       <fragment>false</fragment>
+       <rtexprvalue>true</rtexprvalue>  
+    </attribute>
+     <attribute>
+       <name>open</name>
+       <required>false</required>
+       <type>java.lang.Boolean</type>
+      <fragment>false</fragment> 
+       <rtexprvalue>true</rtexprvalue>  
+    </attribute>
+  </tag>
+  <tag>
+    <name>PrettyTimeTag</name>
+    <tag-class>com.wallissoftware.ale.tags.PrettyTimeTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+       <name>date</name>
+       <required>true</required>
+       <type>java.lang.Long</type>
+       <fragment>false</fragment>
+       <rtexprvalue>true</rtexprvalue>  
+    </attribute>
+  </tag>
+</taglib>

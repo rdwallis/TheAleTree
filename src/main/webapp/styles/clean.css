@@ -1,0 +1,198 @@
+body, table td, select, button {
+  font-family: Arial Unicode MS, Arial, sans-serif;
+}
+
+body {
+  color: black;
+  border: 0;
+  margin: 1em 2em;
+  background: #fff;
+  direction: ltr;
+}
+
+input, textarea {
+	font-size: 1em;	
+}
+
+a {
+  color: #0066cc;
+  text-decoration:none;
+}
+
+a:visited {
+  color: #00aacc;
+  text-decoration:none;
+}
+
+a:hover {
+  text-decoration:underline;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.header .logo {
+	margin-right: 2em;
+	float: left;
+	width: 9em;
+	height: 9em;
+}
+
+.header .text h1 {
+	padding-top: 0.4em;
+	font-size: 3em;
+	color: #008500;
+	text-shadow: 0.04em 0.04em black;
+	margin-bottom: 0;
+}
+
+.header {
+	margin-bottom: 3em;
+}
+
+.node {
+	border-bottom: 0.1em solid #ddd;	
+	padding: 1em 0;
+}
+
+.node .vote .arrow {
+	cursor: pointer;
+	width: 2em;
+	height: 2em;
+	stroke-width:0;
+	display:block;
+	margin: 0;
+}
+
+.node .vote .arrow .unselected{
+	fill: #cccccc;
+}
+
+.node .vote .arrow .selected{
+	fill: #008500;
+}
+
+
+.node .vote {
+	vertical-align: top;
+	display:inline-block;
+	width: 2em;
+	height: 5em;
+	overflow:hidden;
+	margin-right: 1em;
+}
+
+.node .vote .count {
+	width: 2em;
+	text-align: center;
+	line-height: 1em;
+}
+
+.node .right {
+	display:inline-block;
+}
+
+.node .right .content {
+	width: 40em;
+}
+
+.node .right .content :first-child {
+	margin-top: 0;
+}
+
+.node .right .content :last-child {
+	margin-bottom: 0;
+} 
+
+.node .children {
+	width: 100%;
+}
+
+.disclosurePanel > .disclosurePanel-header {
+	color: black!important;
+	text-decoration:none!important;
+	font-size: 0.8em;
+}
+
+.disclosurePanel > a > svg {
+	width: 0.8em;
+	height: 1em;
+	vertical-align: text-top;
+	margin-top: 0.2em;
+	margin-right: 0.2em;
+}
+
+.disclosurePanel-closed > .closed, .disclosurePanel-open > .open, .disclosurePanel-closed > a svg .closed, .disclosurePanel-open > a svg .open, .disclosurePanel-open > .disclosurePanel-content{
+	display: block;
+}
+
+.disclosurePanel-closed > .open, .disclosurePanel-open > .closed, .disclosurePanel-closed > a svg .open, .disclosurePanel-open > a svg .closed, .disclosurePanel-closed > .disclosurePanel-content{
+	display:none;
+}
+
+.disclosurePanel .open {
+	stroke:#000;
+	stroke-width:10;
+}
+
+.disclosurePanel .closed {
+	stroke:#000;
+	stroke-width:8;
+}
+
+.attachPanel {
+	margin-bottom: 1em;
+	max-width: 40em;
+}
+
+.attachPanel input[type="text"] {
+	display:block;
+	width: 99%;
+	margin-bottom: 1em;
+}
+
+.attachPanel textarea {
+	display:block;
+	width: 99%;
+	height: 8em;
+	margin-bottom: 1em;
+}
+
+input[type="submit"] {
+	float: right;
+	
+	-webkit-appearance: push-button;
+	border-radius: 0.5em;
+	font-size: 0.8em;
+	background: white;
+	border: 0.1em solid gray;
+	padding: 0.2em 0.5em;
+}
+
+input[type="submit"]:active {
+	background: #ccc;
+}
+
+
+.attachPanel form {
+	border: 0.1em solid #ccc;
+	border-radius: 0.5em;
+	padding: 1em; 
+	padding-bottom: 3em;
+	margin: 0.5em 0;
+}
+
+.attachPanel form.comment {
+	padding-bottom: 2em;
+}
+
+.attachPanel {
+	padding-left: 2em;
+}
+.age {
+	color: #444;
+	font-size: 0.8em;
+}
+

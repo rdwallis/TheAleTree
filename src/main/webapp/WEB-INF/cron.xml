@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/1/admin/updatenoderanks</url>
+    <description>Recalculate Wilson Scores</description>
+    <schedule>every 30 minutes</schedule>
+    <target>rank</target>
+  </cron>
+</cronentries>
