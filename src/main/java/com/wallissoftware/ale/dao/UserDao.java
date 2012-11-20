@@ -1,19 +1,21 @@
 package com.wallissoftware.ale.dao;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
+import lombok.extern.java.Log;
 
 import com.wallissoftware.ale.model.Team;
 import com.wallissoftware.ale.model.User;
 
 
+@Log
 public class UserDao {
 	
 	private static long TIME_OUT = 900000; //15 Minutes
 	private static int MAX_TEAM_SIZE = 25;
 
 	public User get(final String ipAddress) {
-		User user;
-		user = ofy().load().type(User.class).id(ipAddress).get();
+		log.info("IPAddress: " + ipAddress);
+		User user = ofy().load().type(User.class).id(ipAddress).get();
 		if (user == null) {
 			user = new User(ipAddress);
 		}

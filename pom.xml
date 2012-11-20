@@ -152,7 +152,6 @@
 			<version>2.3.5.Final</version>
 		</dependency>
 
-
 		<!-- Guice integration -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

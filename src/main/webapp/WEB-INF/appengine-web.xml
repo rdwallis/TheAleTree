@@ -17,11 +17,10 @@
         />
     </system-properties>
 
-    <sessions-enabled>true</sessions-enabled>
+    <sessions-enabled>false</sessions-enabled>
 
 	<threadsafe>true</threadsafe>
 	
-	 <!-- Configure serving/caching of GWT files -->
 	<static-files>
 		<include path="/docs/**" expiration="200s"/>
 		<include path="/images/**" expiration="365d"/>

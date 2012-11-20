@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.extern.java.Log;
+
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -27,6 +29,7 @@ import com.wallissoftware.ale.model.Team;
 import com.wallissoftware.ale.model.User;
 import com.wallissoftware.ale.model.Vote;
 
+@Log
 public class NodeDao {
 
 	public Node get(final long id) {
@@ -76,7 +79,7 @@ public class NodeDao {
 		    try {
 				queue.add(withUrl("/1/admin/normalizenode/" + node.getId() + "/" + URLEncoder.encode(user.getIpAddress(), "UTF-8")));
 			} catch (UnsupportedEncodingException e) {
-				//fallthrough
+				log.warning("Failed to add Node to Queue: " + node.getId());
 			}
 		}
 		

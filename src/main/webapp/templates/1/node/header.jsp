@@ -4,13 +4,13 @@
 <head>
 <title><c:if test="${model.root != null}">${model.root.title} | </c:if>The
 	Ale Tree</title>
-	 <link rel="icon" href="images/ale_tree16x16.png" sizes="16x16" type="image/png">
-	 <link rel="icon" href="images/ale_tree32x32.png" sizes="32x32" type="image/png">
-	 <link rel="icon" href="images/ale_tree48x48.png" sizes="48x48" type="image/png">
-	 <link rel="icon" href="images/ale_tree96x96.png" sizes="96x96" type="image/png">
-	 <link rel="icon" href="images/ale_tree128x128.png" sizes="128x128" type="image/png">
-	 <link rel="icon" href="images/ale_tree256x256.png" sizes="256x256" type="image/png">
-	 <link rel="icon" href="images/ale_tree.svg" sizes="any" type="image/svg+xml">
+	 <link rel="icon" href="/images/ale_tree16x16.png" sizes="16x16" type="image/png">
+	 <link rel="icon" href="/images/ale_tree32x32.png" sizes="32x32" type="image/png">
+	 <link rel="icon" href="/images/ale_tree48x48.png" sizes="48x48" type="image/png">
+	 <link rel="icon" href="/images/ale_tree96x96.png" sizes="96x96" type="image/png">
+	 <link rel="icon" href="/images/ale_tree128x128.png" sizes="128x128" type="image/png">
+	 <link rel="icon" href="/images/ale_tree256x256.png" sizes="256x256" type="image/png">
+	 <link rel="icon" href="/images/ale_tree.svg" sizes="any" type="image/svg+xml">
 	
 	<style type="text/css">
 	<%@ include file="/styles/clean.css" %>

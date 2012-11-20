@@ -1,13 +1,11 @@
 package com.wallissoftware.ale.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Data;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.ocpsoft.pretty.time.PrettyTime;
 
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
@@ -27,7 +25,7 @@ public class Node {
 	
 	private long childCount;
 	
-	private String url;
+	@Index private String url;
 	
 	private String comment;
 	

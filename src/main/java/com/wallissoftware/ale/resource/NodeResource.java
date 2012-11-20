@@ -12,6 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
+import org.jboss.resteasy.annotations.cache.Cache;
+import org.jboss.resteasy.annotations.cache.NoCache;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -29,6 +32,7 @@ import com.wallissoftware.ale.model.Vote;
 
 @Singleton
 @Path("/node")
+@Cache(maxAge=60, sMaxAge=60)
 public class NodeResource {
 
 	private final NodeDao nodeDao;
@@ -44,7 +48,7 @@ public class NodeResource {
 	
 	@GET
 	@Path("/{parentId}/attach")
-	public View attachView(@PathParam("parentId") final long parentId, @QueryParam("strip") @DefaultValue("false") final boolean strip, @QueryParam("showLink") @DefaultValue("true") final boolean showLink, @QueryParam("showcomment") @DefaultValue("true") final boolean showComment) throws InvalidNodeException, InvalidHeirachyException {
+	public View attachView(@PathParam("parentId") final long parentId, @QueryParam("strip") @DefaultValue("false") final boolean strip, @QueryParam("showlink") @DefaultValue("true") final boolean showLink, @QueryParam("showcomment") @DefaultValue("true") final boolean showComment) throws InvalidNodeException, InvalidHeirachyException {
 		ImmutableMap<String, ? extends Object> map = ImmutableMap.of("parentId", parentId, "open", !strip, "showComment", showComment, "showLink", showLink);
 		if (strip) {
 			return new View("/templates/1/node/attach/attach.jsp", map);
@@ -65,7 +69,7 @@ public class NodeResource {
 	}
 	
 	
-	
+	@NoCache
 	@GET
 	@Path("/{parentId}/create")
 	@Consumes({"application/json"})
@@ -77,7 +81,7 @@ public class NodeResource {
 		if (comment.isEmpty()) {
 			comment = null;
 		}
-		final User user = userDao.get(req.getLocalAddr());
+		final User user = userDao.get(req.getRemoteAddr());
 		Team team = teamDao.get(user.getTeam());
 		if (team == null) {
 			team = userDao.assignTeam(user);
@@ -116,36 +120,42 @@ public class NodeResource {
 		}
 	}
 	
+	@NoCache
 	@GET
 	@Path("/{id}/up")
 	public void upVoteNode(@PathParam("id") final long id, final @Context HttpServletRequest req,  @QueryParam("ignore") @DefaultValue("false") final boolean ignore) {
 		doAction(id, req, ActionType.VOTE, Vote.UP, ignore);
 	}
 	
+	@NoCache
 	@GET
 	@Path("/{id}/down")
 	public void downVoteNode(@PathParam("id") final long id, final @Context HttpServletRequest req,  @QueryParam("ignore") @DefaultValue("false") final boolean ignore) {
 		doAction(id, req, ActionType.VOTE, Vote.DOWN, ignore);
 	}
 	
+	@NoCache
 	@GET
 	@Path("/{id}/spam")
 	public void spamNode(@PathParam("id") final long id, final @Context HttpServletRequest req,  @QueryParam("ignore") @DefaultValue("false") final boolean ignore) {
 		doAction(id, req, ActionType.SPAM, Vote.UP, ignore);
 	}
 	
+	@NoCache
 	@GET
 	@Path("/{id}/notspam")
 	public void notSpamNode(@PathParam("id") final long id, final @Context HttpServletRequest req,  @QueryParam("ignore") @DefaultValue("false") final boolean ignore) {
 		doAction(id, req, ActionType.SPAM, Vote.DOWN, ignore);
 	}
 	
+	@NoCache
 	@GET
 	@Path("/{id}/link/{parentId}")
 	public void linkNode(@PathParam("id") final long id, @PathParam("parentId") final long parentId, final @Context HttpServletRequest req,  @QueryParam("ignore") @DefaultValue("false") final boolean ignore) throws InvalidHeirachyException {
 		doAction(id, req, ActionType.LINK, Vote.UP, nodeDao.get(parentId), ignore);
 	}
 	
+	@NoCache
 	@GET
 	@Path("/{id}/unlink/{parentId}")
 	public void unlinkNode(@PathParam("id") final long id, @PathParam("parentId") final long parentId, final @Context HttpServletRequest req,  @QueryParam("ignore") @DefaultValue("false") final boolean ignore) throws InvalidHeirachyException {
