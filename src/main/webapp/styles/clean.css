@@ -200,3 +200,9 @@ input[type="submit"]:active {
 	margin-bottom: 1em;
 }
 
+.markdown {
+	padding: 0.5em;
+	border: solid 0.1em #ccc;
+	border-radius: 0.5em;
+}
+
