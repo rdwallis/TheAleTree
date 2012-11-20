@@ -30,12 +30,12 @@
 </c:if>
 
 <c:if test="${showLink}">
-		<ex:DisclosureTag href="/1/node/${parentId}/attachlink" text="${submitText}" open="${open}">
+		<ex:DisclosureTag href="/1/node/${parentId}/attach?showcomment=false" text="${submitText}" open="${open}">
 			<%@ include file="attachLink.jsp"%>
 		</ex:DisclosureTag>
 </c:if>
 <c:if test="${showComment}">
-		<ex:DisclosureTag href="/1/node/${parentId}/attachcomment" text="${commentText}" open="${open}">
+		<ex:DisclosureTag href="/1/node/${parentId}/attach?showlink=false" text="${commentText}" open="${open}">
 			<%@ include file="attachComment.jsp"%>
 		</ex:DisclosureTag>
 </c:if>
