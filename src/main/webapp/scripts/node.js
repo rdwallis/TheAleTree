@@ -33,26 +33,4 @@ var node = {
 		vCount.text(count);
 	},
 	
-	toggleChildren: function(id) {
-		$("#disclosurePanel" + id).toggleClass("disclosurePanel-open disclosurePanel-closed");
-		if (!$("#childPanel" + id).html().trim()) {
-			node.refreshChildren(id);
-		}
-		
-	},
-	
-	refreshChildren: function(id) {
-		$.ajax({
-			type: "GET",
-			url: "/1/node/" + id + "?strip=true",
-			success: function (data) {
-				$("#childPanel" + id).html(data);
-			},
-		});
-	},
-	
-	toggleAttach: function(id) {
-		$("#attachPanel" + id).toggleClass("disclosurePanel-open disclosurePanel-closed");
-	}
-	
 };
