@@ -30,7 +30,7 @@
 </c:if>
 
 <c:if test="${showLink}">
-		<ex:DisclosureTag href="/1/node/${model.parentId}/attachlink" text="${submitText}" open="${open}">
+		<ex:DisclosureTag href="/1/node/${parentId}/attachlink" text="${submitText}" open="${open}">
 			<%@ include file="attachLink.jsp"%>
 		</ex:DisclosureTag>
 </c:if>
