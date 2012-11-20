@@ -26,14 +26,14 @@ public class CacheFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		String maxAge = "600";
+		String maxAge = "300";
 		if (response instanceof HttpServletResponse) {
 			
 			String path = ((HttpServletRequest) request).getRequestURI();
 			log.info("CONTEXT-PATH: " + path);
 			if (path.startsWith("/images")) {
 				maxAge = "31557600";
-			} else if (path.startsWith("/docs")) {
+			} else if ((path.startsWith("/docs")) || path.endsWith("/attach")){
 				maxAge= "86400";
 			} else if (path.endsWith("up") || path.endsWith("down") || path.endsWith("spam") || path.endsWith("notspam") || path.endsWith("link") || path.endsWith("unlink")) {
 				maxAge= "0";
