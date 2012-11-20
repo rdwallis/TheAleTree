@@ -6,8 +6,11 @@
 	</c:when>
 	<c:otherwise>
 		<c:set var="parentId" value="0" scope="request"/>
-		<%@ include file="attach/attach.jsp"%>
+		<div class="mainAttach">
+			<%@ include file="attach/attach.jsp"%>
+		</div>
 		<%@ include file="nodeList.jsp"%>
+		
 	</c:otherwise>
 </c:choose>
 

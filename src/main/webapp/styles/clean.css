@@ -49,7 +49,7 @@ table {
 }
 
 .header {
-	margin-bottom: 3em;
+	margin-bottom: 1em;
 }
 
 .node {
@@ -194,5 +194,9 @@ input[type="submit"]:active {
 .age {
 	color: #444;
 	font-size: 0.8em;
+}
+
+.mainAttach {
+	margin-bottom: 1em;
 }
 
