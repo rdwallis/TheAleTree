@@ -1,30 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<appengine-web-app
-    xmlns="http://appengine.google.com/ns/1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
         http://appengine.google.com/ns/1.0
         http://googleappengine.googlecode.com/svn/branches/1.2.1/java/docs/appengine-web.xsd">
 
-    <application>aletreeapp</application>
-    <version>2</version>
+	<application>aletreeapp</application>
+	<version>2</version>
 
-    <system-properties>
-        <property
-            name="java.util.logging.config.file"
-            value="WEB-INF/classes/logging.properties"
-        />
-    </system-properties>
+	<system-properties>
+		<property name="java.util.logging.config.file" value="WEB-INF/classes/logging.properties" />
+	</system-properties>
 
-    <sessions-enabled>false</sessions-enabled>
+	<sessions-enabled>false</sessions-enabled>
 
 	<threadsafe>true</threadsafe>
-	
+
 	<static-files>
-		<include path="/**.html" expiration="1d"/>
-		<include path="/**.png" expiration="365d"/>
-		<include path="/**.svg" expiration="365d"/>
+		<include path="/**.html" expiration="1d" />
+		<include path="/**.png" expiration="365d" />
+		<include path="/**.svg" expiration="365d" />
 	</static-files>
-	
+
+
+	<pagespeed>
+		<enabled-rewriter>CollapseWhitespace</enabled-rewriter>
+		<enabled-rewriter>ProxyCss</enabled-rewriter>
+		<enabled-rewriter>ProxyImages</enabled-rewriter>
+		<enabled-rewriter>ProxyJs</enabled-rewriter>
+		<enabled-rewriter>ConvertMetaTags</enabled-rewriter>
+		<enabled-rewriter>InlineCss</enabled-rewriter>
+		<enabled-rewriter>InlineJs</enabled-rewriter>
+		<enabled-rewriter>InlineImages</enabled-rewriter>
+		<enabled-rewriter>InlinePreviewImages</enabled-rewriter>
+		<enabled-rewriter>CollapseWhitespace</enabled-rewriter>
+		<enabled-rewriter>CombineHeads</enabled-rewriter>
+		<enabled-rewriter>ElideAttributes</enabled-rewriter>
+		<enabled-rewriter>RemoveComments</enabled-rewriter>
+		<enabled-rewriter>RemoveQuotes</enabled-rewriter>
+		<enabled-rewriter>LeftTrimUrls</enabled-rewriter>
+		<enabled-rewriter>CombineCss</enabled-rewriter>
+		<enabled-rewriter>MoveCssToHead</enabled-rewriter>
+		<enabled-rewriter>MinifyCss</enabled-rewriter>
+		<enabled-rewriter>WebpOptimization</enabled-rewriter>
+		<enabled-rewriter>ImageConvertToJpeg</enabled-rewriter>
+		<enabled-rewriter>ImageRecompressJpeg</enabled-rewriter>
+		<enabled-rewriter>ImageProgressiveJpeg</enabled-rewriter>
+		<enabled-rewriter>ImageRecompressPng</enabled-rewriter>
+		<enabled-rewriter>ImageStripMetadata</enabled-rewriter>
+		<enabled-rewriter>ImageStripColorProfile</enabled-rewriter>
+		<enabled-rewriter>ImageResize</enabled-rewriter>
+		<enabled-rewriter>LazyloadImages</enabled-rewriter>
+		<enabled-rewriter>ImageAddDimensions</enabled-rewriter>
+		<enabled-rewriter>CombineJs</enabled-rewriter>
+		<enabled-rewriter>JsOptimize</enabled-rewriter>
+		<enabled-rewriter>DeferJs</enabled-rewriter>
+	</pagespeed>
 </appengine-web-app>

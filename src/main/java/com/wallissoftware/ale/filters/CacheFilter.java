@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -13,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import lombok.extern.java.Log;
-
-@Log
 public class CacheFilter implements Filter{
 
 	@Override
@@ -30,14 +26,20 @@ public class CacheFilter implements Filter{
 		if (response instanceof HttpServletResponse) {
 			
 			String path = ((HttpServletRequest) request).getRequestURI();
-			log.info("CONTEXT-PATH: " + path);
 			if (path.startsWith("/images")) {
 				maxAge = "31557600";
-			} else if ((path.startsWith("/docs")) || path.endsWith("/attach")){
+			} else if ((path.startsWith("/docs")) || path.endsWith("/attach") || path.endsWith(".ico")){
 				maxAge= "86400";
 			} else if (path.endsWith("up") || path.endsWith("down") || path.endsWith("spam") || path.endsWith("notspam") || path.endsWith("link") || path.endsWith("unlink")) {
 				maxAge= "0";
 			}
+			
+			if (path.equals("/") || path.startsWith("/1")) {
+				((HttpServletResponse) response).setContentType("text/html");
+				((HttpServletResponse) response).setCharacterEncoding("UTF-8");
+			}
+			
+			((HttpServletResponse) response).setHeader("Vary", "Accept-Encoding");
 			((HttpServletResponse) response).setHeader("Cache-Control", "public, max-age=" + maxAge);
 			((HttpServletResponse) response).setHeader("Pragma", "Public");
 			chain.doFilter(request, new HttpServletResponseWrapper((HttpServletResponse) response) {

@@ -1,34 +1,32 @@
-
-
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>How Ale Tree Works | The	Ale Tree</title>
-	<style type="text/css">
-	body, table td, select, button {
-  font-family: Arial Unicode MS, Arial, sans-serif;
+<title>How Ale Tree Works | The Ale Tree</title>
+<style type="text/css">
+body,table td,select,button {
+	font-family: Arial Unicode MS, Arial, sans-serif;
 }
 
 body {
-  color: black;
-  border: 0;
-  margin: 1em 2em;
-  background: #fff;
-  direction: ltr;
+	color: black;
+	border: 0;
+	margin: 1em 2em;
+	background: #fff;
+	direction: ltr;
 }
 
 a {
-  color: #0066cc;
-  text-decoration:none;
+	color: #0066cc;
+	text-decoration: none;
 }
 
 a:visited {
-  color: #00aacc;
-  text-decoration:none;
+	color: #00aacc;
+	text-decoration: none;
 }
 
 a:hover {
-  text-decoration:underline;
+	text-decoration: underline;
 }
 
 table {
@@ -43,44 +41,65 @@ table {
 	height: 9em;
 }
 
+.header .logo a {
+	position: relative;
+	display: inline-block;
+	z-index: 2;
+	width: 9em;
+	height: 9em;
+}
+
+.header .logo object,.header .logo img {
+	position: relative;
+	top: -9em;
+}
+
 .header .text h1 {
 	padding-top: 0.4em;
 	font-size: 3em;
-	color: #008500;
-	text-shadow: 0.04em 0.04em black;
 	margin-bottom: 0;
 }
 
+.header .text h1 a {
+	color: #008500 !important;
+	text-shadow: 0.04em 0.04em black;
+	text-decoration: none !important;
+}
+
 .header {
-	margin-bottom: 3em;
+	margin-bottom: 1em;
 }
 </style>
 
-	
+
 </head>
 <body>
-	<div class="header" >
-		<span class="logo">
-			<object data="/images/ale_tree.svg" type="image/svg+xml">
-				<img src="/images/ale_tree.png"/>
+	<div class="header">
+		<span class="logo"> <a href="/" title="The Ale Tree"></a> <object data="/images/ale_tree.svg" type="image/svg+xml">
+				<img src="/images/ale_tree.png" />
 			</object>
 		</span>
 		<div class="text">
-			<h1>How The Ale Tree Works</h1>
-			<p>This is a simple guide to The Ale Tree.<br/>
-			Read on to find out how votes are counted and how content gets to the front page.</p>
+			<h1>
+				<a href="/" title="The Ale Tree">How The Ale Tree Works</a>
+			</h1>
+			<p>
+				This is a simple guide to The Ale Tree.<br /> Read on to find out how votes are counted and how content gets to the front page.
+			</p>
 		</div>
 		<h2>Basic Concepts</h2>
-		<p>Before they vote, post or comment; users are divided into teams automatically by the server. </p>
+		<p>Before they vote, post or comment; users are divided into teams automatically by the server.</p>
 		<p>Their action is only performed if other members of the team approve it.</p>
 		<p>This stops collusion and spam because users can't choose their teammates.</p>
 		<h2>Everyone's anonymous</h2>
-		<p>Although we do log IP addresses to avoid duplicate votes, you'll never know who posted a link or comment.  Content must survive on its own merits.</p>
+		<p>Although we do log IP addresses to avoid duplicate votes, you'll never know who posted a link or comment. Content must survive on its own merits.</p>
 		<p>There's no reputation. New users have the same chance of getting a post to the front page as anyone else.</p>
 		<h2>We're Open Source</h2>
-		<p>You can browse the source at: <a href="https://github.com/rdwallis/TheAleTree">GitHub - The Ale Tree</a></p>
+		<p>
+			You can browse the source at: <a href="https://github.com/rdwallis/TheAleTree">GitHub - The Ale Tree</a>
+		</p>
 	</div>
-	
-</div>
+
+	</div>
 </body>
 </html>

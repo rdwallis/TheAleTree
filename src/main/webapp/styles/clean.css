@@ -38,14 +38,22 @@ table {
 	float: left;
 	width: 9em;
 	height: 9em;
+	font-size: 1em;
 }
+
+
+
 
 .header .text h1 {
 	padding-top: 0.4em;
 	font-size: 3em;
-	color: #008500;
-	text-shadow: 0.04em 0.04em black;
 	margin-bottom: 0;
+}
+
+.header .text h1 a{
+	color: #008500!important;
+	text-shadow: 0.04em 0.04em black;
+	text-decoration:none!important;
 }
 
 .header {
@@ -59,8 +67,8 @@ table {
 
 .node .vote .arrow {
 	cursor: pointer;
-	width: 2em;
-	height: 2em;
+	width: 1.5em;
+	height: 1.5em;
 	stroke-width:0;
 	display:block;
 	margin: 0;
@@ -78,16 +86,19 @@ table {
 .node .vote {
 	vertical-align: top;
 	display:inline-block;
-	width: 2em;
+	width: 1.5em;
 	height: 5em;
 	overflow:hidden;
-	margin-right: 1em;
+	margin-right: 0.7em;
+	margin-top: 0.3em;
 }
 
 .node .vote .count {
-	width: 2em;
+	width: 100%;
 	text-align: center;
 	line-height: 1em;
+	font-size: 0.8em;
+	color: #666;
 }
 
 .node .right {
@@ -197,7 +208,9 @@ input[type="submit"]:active {
 }
 
 .mainAttach {
-	margin-bottom: 1em;
+	width:100%;
+	padding-bottom: 1em;
+	border-bottom: 0.1em solid #ddd;
 }
 
 .markdown {

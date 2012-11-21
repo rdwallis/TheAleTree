@@ -27,7 +27,7 @@ public class DisclosureTag extends SimpleTagSupport {
 		out.print(isOpen() ? "open" : "closed");
 		out.print("\"><a href=\"");
 		out.print(getHref());
-		out.print("\" class=\"disclosurePanel-header\" onclick=\"return aleTree.toggleDisclosure($(this), '");
+		out.print("\" class=\"disclosurePanel-header\" onclick=\"return aleTree.toggleDisclosure(this, '");
 		out.print(getStripHref());
 		out.print("')\"> <svg	xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 50 50\">"+
 		"<line x1=\"25\" y1=\"0\" x2=\"25\" y2=\"45\" class=\"closed\" />" +

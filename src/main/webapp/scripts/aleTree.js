@@ -1,6 +1,7 @@
 var aleTree = {
 	
 	toggleDisclosure: function(elem, href) {
+		elem = $(elem);
 		elem.parent().toggleClass("disclosurePanel-open disclosurePanel-closed");
 		if (!elem.parent().find(".disclosurePanel-content").html()) {
 			$.ajax({

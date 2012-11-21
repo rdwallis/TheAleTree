@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /*up
+Disallow: /*down
+Disallow: /*spam
+Disallow: /*notspam
+Disallow: /*link
+Disallow: /*unlink
