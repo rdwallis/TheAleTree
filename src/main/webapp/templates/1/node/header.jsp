@@ -2,6 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="/styles/clean.css">
 <title><c:if test="${not empty model.root.title}">${model.root.title} | </c:if>The Ale Tree</title>
 <link rel="icon" href="/images/ale_tree16x16.png" sizes="16x16" type="image/png">
 <link rel="icon" href="/images/ale_tree32x32.png" sizes="32x32" type="image/png">
@@ -10,8 +11,6 @@
 <link rel="icon" href="/images/ale_tree128x128.png" sizes="128x128" type="image/png">
 <link rel="icon" href="/images/ale_tree256x256.png" sizes="256x256" type="image/png">
 <link rel="icon" href="/images/at.svg" sizes="any" type="image/svg+xml">
-
-<link rel="stylesheet" type="text/css" href="/styles/clean.css">
 </style>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="/scripts/node.js"></script>

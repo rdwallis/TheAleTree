@@ -33,7 +33,6 @@
 		<enabled-rewriter>InlineJs</enabled-rewriter>
 		<enabled-rewriter>InlineImages</enabled-rewriter>
 		<enabled-rewriter>InlinePreviewImages</enabled-rewriter>
-		<enabled-rewriter>CollapseWhitespace</enabled-rewriter>
 		<enabled-rewriter>CombineHeads</enabled-rewriter>
 		<enabled-rewriter>ElideAttributes</enabled-rewriter>
 		<enabled-rewriter>RemoveComments</enabled-rewriter>

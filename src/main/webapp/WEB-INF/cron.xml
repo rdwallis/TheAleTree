@@ -3,7 +3,7 @@
   <cron>
     <url>/1/admin/updatenoderanks</url>
     <description>Recalculate Wilson Scores</description>
-    <schedule>every 30 minutes</schedule>
+    <schedule>every 60 minutes</schedule>
     <target>rank</target>
   </cron>
 </cronentries>

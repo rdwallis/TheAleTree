@@ -3,7 +3,9 @@ package com.wallissoftware.ale.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -11,6 +13,7 @@ import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.OnSave;
 import com.petebevin.markdown.MarkdownProcessor;
 import com.wallissoftware.ale.exceptions.InvalidNodeException;
 
@@ -18,6 +21,8 @@ import com.wallissoftware.ale.exceptions.InvalidNodeException;
 @Entity
 @Data
 public class Node {
+	
+	private final static long CACHED_COMMENT_VERSION = 1;
 	
 	@Id private Long id;
 	
@@ -49,17 +54,21 @@ public class Node {
 	
 	private Long redirect;
 	
-	private double wilsonScore;
+	@Getter(AccessLevel.PRIVATE) private double wilsonScore;
 	
-	@Index private double weightedWilsonScore;
+	@Getter(AccessLevel.PRIVATE) @Index private double weightedWilsonScore;
 	
-	private double spamWilsonScore;
+	@Getter(AccessLevel.PRIVATE) private double spamWilsonScore;
 	
-	private long lastCalculationTime;
+	@Getter(AccessLevel.PRIVATE) private long lastCalculationTime;
 	
-	private int delayIncrement;
+	@Getter(AccessLevel.PRIVATE) private int delayIncrement;
 	
-	private long nextCalculationTime;
+	@Getter(AccessLevel.PRIVATE) private long nextCalculationTime;
+	
+	@Getter(AccessLevel.PRIVATE) private String cachedComment;
+	
+	@Getter(AccessLevel.PRIVATE) private long cachedCommentVersion;
 	
 	protected Node() {
 		
@@ -82,10 +91,29 @@ public class Node {
 		updateWilsonScore();
 	}
 	
-	public void setComment(final String comment) {
-		this.comment = new MarkdownProcessor().markdown((StringEscapeUtils.escapeHtml4(comment)));
+	public String getComment() {
+		if (isCachedCommentUpToDate()) {
+			return calcCachedComment();
+		}
+		return getCachedComment();
 	}
 	
+	@OnSave
+	void onSave(){
+		if (isCachedCommentUpToDate()) {
+			setCachedComment(calcCachedComment());
+			setCachedCommentVersion(CACHED_COMMENT_VERSION);
+		}
+	}
+	
+	private boolean isCachedCommentUpToDate() {
+		return getCachedCommentVersion() != CACHED_COMMENT_VERSION;
+	}
+	
+	private String calcCachedComment() {
+		return new MarkdownProcessor().markdown(comment.replace("<", "&lt;").replace("<", "&gt;").replace("\\(", "(").replace("\\)", ")"));
+	}
+
 	public void setUrl(String url) {
 		url = url.trim();
 		if (!url.contains("://")) {
