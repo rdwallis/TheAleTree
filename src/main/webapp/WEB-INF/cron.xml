@@ -3,7 +3,13 @@
   <cron>
     <url>/1/admin/updatenoderanks</url>
     <description>Recalculate Wilson Scores</description>
-    <schedule>every 60 minutes</schedule>
+    <schedule>every 53 minutes</schedule>
+    <target>rank</target>
+  </cron>
+  <cron>
+    <url>/1/admin/updaterss</url>
+    <description>Update Rss</description>
+    <schedule>every 53 minutes</schedule>
     <target>rank</target>
   </cron>
 </cronentries>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes
+  autoGenerate="true">
+     <datastore-index kind="Node" ancestor="false" source="manual">
+        <property name="parents" direction="asc"/>
+        <property name="redirect" direction="asc"/>
+        <property name="weightedWilsonScore" direction="desc"/>
+        <property name="reset" direction="desc"/>
+    </datastore-index>
+</datastore-indexes>

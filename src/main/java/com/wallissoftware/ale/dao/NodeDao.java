@@ -11,6 +11,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +22,6 @@ import lombok.extern.java.Log;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
-
 import com.googlecode.objectify.Ref;
 import com.wallissoftware.ale.exceptions.InvalidHeirachyException;
 import com.wallissoftware.ale.exceptions.InvalidNodeException;
@@ -37,18 +39,25 @@ public class NodeDao {
 			return null;
 		}
 		Node node = ofy().load().type(Node.class).id(id).get();
-		if (node.getRedirect() != null) {
-			node = ofy().load().type(Node.class).id(node.getRedirect()).get();
+		if (node.isRedirect()) {
+			node = ofy().load().type(Node.class).id(node.getRedirectId()).get();
 		}
 		return node;
 	}
-
+	
 	public Node create(final String url, final String comment,
 			final long parentId, final User user, final Team team, final boolean ignore)
 			throws InvalidNodeException, InvalidHeirachyException {
-		
-		Node node = new Node(url, comment, parentId);
+		return create(url, comment, parentId, user, team, ignore, null);
+	}
+
+	public Node create(final String url, final String comment,
+			final long parentId, final User user, final Team team, final boolean ignore, final Date created)
+			throws InvalidNodeException, InvalidHeirachyException {
+		log.info("Creating Node: " + url);
+		Node node = new Node(url, comment, parentId, created == null ? System.currentTimeMillis(): created.getTime());
 		Node existing = null;
+		log.info("Check Exists");
 		if (node.getUrl() != null) {
 			existing = getByUrl(node.getUrl());
 			if (existing != null) {
@@ -62,6 +71,7 @@ public class NodeDao {
 			}
 			
 		}
+		log.info("Process parent");
 		Node parent = null;
 		if (parentId != 0) {
 			parent = ofy().load().type(Node.class).id(parentId).get();
@@ -69,11 +79,13 @@ public class NodeDao {
 				throw new InvalidHeirachyException();
 			}
 		}
+		log.info("Instant Save");
 		ofy().save().entity(node).now();
 		if (parent != null) {
 			parent.incChildCount();
 			ofy().save().entity(parent);
 		}
+		log.info("Add to taskqueue");
 		if (existing == null) {
 			Queue queue = QueueFactory.getDefaultQueue();
 		    try {
@@ -92,7 +104,7 @@ public class NodeDao {
 		try {
 			URL url = new URL(node.getUrl());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					url.openStream()));
+					url.openStream(), "UTF-8"));
 		
 			String line;
 			StringBuffer html = new StringBuffer();
@@ -119,7 +131,7 @@ public class NodeDao {
 							Node existing = getByUrl(canUrl);
 							
 							if (existing != null) {
-								node.setRedirect(existing.getId());
+								node.setRedirectId(existing.getId());
 								long parentId = node.getParents().iterator().next();
 								if (!existing.getParents().contains(parentId)) {
 									doAction(existing, user, team, ActionType.LINK, Vote.UP, get(parentId), false);	
@@ -194,20 +206,22 @@ public class NodeDao {
 		return node;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void updateNodeRanks() {
 		QueryResultIterator<Node> iter = ofy().load().type(Node.class)
 				.filter("nextCalculationTime < ", System.currentTimeMillis()).iterator();
 
+		final Set<Node> toSave = new HashSet<Node>();
 		while (iter.hasNext()) {
-			iter.next().updateWeightedWilsonScore();
+			final Node node = iter.next();
+			toSave.add(node);
+			node.updateWeightedWilsonScore();
 		}
 
-		ofy().save().entities(iter);
+		ofy().save().entities(toSave);
 	}
 
 	public Collection<Node> getChildren(long id, int offset, int limit) {
-		return ofy().load().type(Node.class).filter("parents", id).order("-weightedWilsonScore").order("-reset").offset(offset).limit(limit).list();
+		return ofy().load().type(Node.class).filter("parents", id).filter("redirect", false).order("-weightedWilsonScore").order("-reset").offset(offset).limit(limit).list();
 	}
 
 }

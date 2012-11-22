@@ -12,6 +12,10 @@
 
 	<name>thealetree</name>
 
+	<scm>
+		<url>https://github.com/rdwallis/TheAleTree</url>
+	</scm>
+
 	<repositories>
 		<repository>
 			<id>jboss</id>
@@ -96,17 +100,7 @@
 		</dependency>
 
 		<!-- These dependencies are here just for enabling logging. -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.22</version>
-		</dependency>
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> <version>1.6.0</version> </dependency> -->
 
 		<!-- Test scope -->
 		<dependency>
@@ -195,6 +189,19 @@
 			<artifactId>slf4j-jdk14</artifactId>
 			<version>1.6.4</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.horrabin</groupId>
+			<artifactId>horrorss</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.sparta-xml</groupId>
+			<artifactId>sparta</artifactId>
+			<version>1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -235,6 +242,9 @@
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
 				<version>0.9.4</version>
+				<configuration>
+					<serverId>appengine.google.com</serverId>
+				</configuration>
 			</plugin>
 
 			<!-- Upload application to the appspot automatically, during release:perform. -->

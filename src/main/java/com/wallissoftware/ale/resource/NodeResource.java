@@ -1,5 +1,8 @@
 package com.wallissoftware.ale.resource;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -95,11 +98,14 @@ public class NodeResource {
 	
 	@GET
 	@Path("/{id}")
-	public View getNodeListView(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("offset") @DefaultValue("25") final int limit, @QueryParam("strip") @DefaultValue("false") final boolean strip) {
+	public View getNodeListView(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue("25") final int limit, @QueryParam("strip") @DefaultValue("false") final boolean strip) {
+		Map<String, Object> model = getNode(id, offset, limit);
+		model.put("limit", limit);
+		model.put("offset", offset);
 		if (strip) {
-			return new View("/templates/1/node/nodeList.jsp", getNode(id, offset, limit));
+			return new View("/templates/1/node/nodeList.jsp", model);
 		} else {
-			return new View("/templates/1/node/nodeListFull.jsp", getNode(id, offset, limit));
+			return new View("/templates/1/node/nodeListFull.jsp", model);
 		}
 	}
 	
@@ -107,12 +113,11 @@ public class NodeResource {
 	@Path("/{id}")
 	@Consumes({"application/json"})
 	@Produces({"application/json"})
-	public ImmutableMap<String, ? extends Object> getNode(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue("25") int limit) {
-		if (id == 0) {
-			return ImmutableMap.of("children", nodeDao.getChildren(id, offset, limit));
-		} else {
-			return ImmutableMap.of("root", nodeDao.get(id), "children", nodeDao.getChildren(id, offset, limit));	
-		}
+	public Map<String, Object> getNode(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue("25") int limit) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("root",nodeDao.get(id));
+		result.put("children", nodeDao.getChildren(id, offset, limit));
+		return result;
 	}
 	
 	@GET

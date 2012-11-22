@@ -40,15 +40,19 @@ public class CacheFilter implements Filter{
 			}
 			
 			((HttpServletResponse) response).setHeader("Vary", "Accept-Encoding");
-			((HttpServletResponse) response).setHeader("Cache-Control", "public, max-age=" + maxAge);
-			((HttpServletResponse) response).setHeader("Pragma", "Public");
-			chain.doFilter(request, new HttpServletResponseWrapper((HttpServletResponse) response) {
-		            public void setHeader(String name, String value) {
-		                if (!"ETag".equalsIgnoreCase(name) && !"Pragma".equalsIgnoreCase(name) && !"Cache-Control".equalsIgnoreCase(name)) {
-		                    super.setHeader(name, value);
-		                }
-		            }
-		        });
+			if (!path.startsWith("/1/admin")) {
+				((HttpServletResponse) response).setHeader("Cache-Control", "public, max-age=" + maxAge);
+				((HttpServletResponse) response).setHeader("Pragma", "Public");
+				chain.doFilter(request, new HttpServletResponseWrapper((HttpServletResponse) response) {
+			            public void setHeader(String name, String value) {
+			                if (!"ETag".equalsIgnoreCase(name) && !"Pragma".equalsIgnoreCase(name) && !"Cache-Control".equalsIgnoreCase(name)) {
+			                    super.setHeader(name, value);
+			                }
+			            }
+			        });
+			} else {
+				chain.doFilter(request, response);
+			}
 		} else {
 			chain.doFilter(request, response);
 		}

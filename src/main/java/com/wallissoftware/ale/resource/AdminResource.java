@@ -8,6 +8,7 @@ import javax.ws.rs.PathParam;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.wallissoftware.ale.dao.NodeDao;
+import com.wallissoftware.ale.dao.RssDao;
 import com.wallissoftware.ale.dao.TeamDao;
 import com.wallissoftware.ale.dao.UserDao;
 import com.wallissoftware.ale.exceptions.InvalidHeirachyException;
@@ -21,12 +22,14 @@ public class AdminResource {
 	private final NodeDao nodeDao;
 	private final UserDao userDao;
 	private final TeamDao teamDao;
+	private final RssDao rssDao;
 
 	@Inject
-	private AdminResource(final NodeDao nodeDao, final UserDao userDao, final TeamDao teamDao) {
+	private AdminResource(final NodeDao nodeDao, final UserDao userDao, final TeamDao teamDao, final RssDao rssDao) {
 		this.nodeDao = nodeDao;
 		this.userDao = userDao;
 		this.teamDao = teamDao;
+		this.rssDao = rssDao;
 	}
 	
 	@GET
@@ -44,6 +47,12 @@ public class AdminResource {
 			team = userDao.assignTeam(user);
 		}
 		nodeDao.normalizeNode(nodeDao.get(id), user, team);
+	}
+	
+	@GET
+	@Path("/updaterss")
+	public void updateRss() {
+		rssDao.updateAll();
 	}
 	
 }

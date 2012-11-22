@@ -52,7 +52,9 @@ public class Node {
 	
 	private long notSpam;
 	
-	private Long redirect;
+	private Long redirectId;
+	
+	@Index private boolean redirect;
 	
 	@Getter(AccessLevel.PRIVATE) private double wilsonScore;
 	
@@ -75,8 +77,12 @@ public class Node {
 	}
 
 	public Node(final String url, final String comment, final long parentId) throws InvalidNodeException {
-		this.setCreated(System.currentTimeMillis());
-		this.setReset(this.getCreated());
+		this(url,comment, parentId, System.currentTimeMillis());
+	}
+	
+	public Node(String url, String comment, long parentId, long created) throws InvalidNodeException {
+		this.setCreated(created);
+		this.setReset(System.currentTimeMillis());
 		
 		if (url != null) {
 			this.setUrl(url); 
@@ -89,10 +95,11 @@ public class Node {
 		
 		this.getParents().add(parentId);
 		updateWilsonScore();
+		
 	}
-	
+
 	public String getComment() {
-		if (isCachedCommentUpToDate()) {
+		if (isComment() && isCachedCommentUpToDate()) {
 			return calcCachedComment();
 		}
 		return getCachedComment();
@@ -100,12 +107,16 @@ public class Node {
 	
 	@OnSave
 	void onSave(){
-		if (isCachedCommentUpToDate()) {
+		if (isComment() && isCachedCommentUpToDate()) {
 			setCachedComment(calcCachedComment());
 			setCachedCommentVersion(CACHED_COMMENT_VERSION);
 		}
 	}
 	
+	private boolean isComment() {
+		return comment != null;
+	}
+
 	private boolean isCachedCommentUpToDate() {
 		return getCachedCommentVersion() != CACHED_COMMENT_VERSION;
 	}
@@ -212,13 +223,14 @@ public class Node {
 	    
 	}
 	
-	public void setRedirect(final long redirect) {
-		this.redirect = redirect;
+	public void setRedirectId(final long redirectId) {
+		this.redirectId = redirectId;
+		this.setRedirect(true);
 		updateWeightedWilsonScore();
 	}
 	
 	public void updateWeightedWilsonScore() {
-		if (this.getRedirect() != null) {
+		if (!this.isRedirect()) {
 			setWeightedWilsonScore(Double.MIN_VALUE);
 			setNextCalculationTime(Long.MAX_VALUE);
 			return;
