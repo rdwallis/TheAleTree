@@ -40,4 +40,16 @@
        <rtexprvalue>true</rtexprvalue>  
     </attribute>
   </tag>
+  <tag>
+    <name>HostStripTag</name>
+    <tag-class>com.wallissoftware.ale.tags.HostStripTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+       <name>url</name>
+       <required>true</required>
+       <type>java.lang.String</type>
+       <fragment>false</fragment>
+       <rtexprvalue>true</rtexprvalue>  
+    </attribute>
+  </tag>
 </taglib>

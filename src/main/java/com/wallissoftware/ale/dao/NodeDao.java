@@ -44,32 +44,36 @@ public class NodeDao {
 		}
 		return node;
 	}
-	
+
 	public Node create(final String url, final String comment,
-			final long parentId, final User user, final Team team, final boolean ignore)
-			throws InvalidNodeException, InvalidHeirachyException {
+			final long parentId, final User user, final Team team,
+			final boolean ignore) throws InvalidNodeException,
+			InvalidHeirachyException {
 		return create(url, comment, parentId, user, team, ignore, null);
 	}
 
 	public Node create(final String url, final String comment,
-			final long parentId, final User user, final Team team, final boolean ignore, final Date created)
+			final long parentId, final User user, final Team team,
+			final boolean ignore, final Date created)
 			throws InvalidNodeException, InvalidHeirachyException {
 		log.info("Creating Node: " + url);
-		Node node = new Node(url, comment, parentId, created == null ? System.currentTimeMillis(): created.getTime());
+		Node node = new Node(url, comment, parentId,
+				created == null ? System.currentTimeMillis()
+						: created.getTime());
 		Node existing = null;
 		log.info("Check Exists");
 		if (node.getUrl() != null) {
 			existing = getByUrl(node.getUrl());
 			if (existing != null) {
 				if (!existing.getParents().contains(parentId)) {
-					return doAction(existing, user, team, ActionType.LINK, Vote.UP,
-							get(parentId), ignore);	
+					return doAction(existing, user, team, ActionType.LINK,
+							Vote.UP, get(parentId), ignore);
 				} else {
 					node = existing;
 					node.getParents().add(parentId);
 				}
 			}
-			
+
 		}
 		log.info("Process parent");
 		Node parent = null;
@@ -88,34 +92,36 @@ public class NodeDao {
 		log.info("Add to taskqueue");
 		if (existing == null) {
 			Queue queue = QueueFactory.getDefaultQueue();
-		    try {
-				queue.add(withUrl("/1/admin/normalizenode/" + node.getId() + "/" + URLEncoder.encode(user.getIpAddress(), "UTF-8")));
+			try {
+				queue.add(withUrl("/1/admin/normalizenode/" + node.getId()
+						+ "/" + URLEncoder.encode(user.getIpAddress(), "UTF-8")));
 			} catch (UnsupportedEncodingException e) {
 				log.warning("Failed to add Node to Queue: " + node.getId());
 			}
 		}
-		
+
 		return doAction(node, user, team, ActionType.VOTE, Vote.UP, ignore);
 	}
 
-	
-	public void normalizeNode(final Node node, final User user, final Team team) throws InvalidHeirachyException {
+	public void normalizeNode(final Node node, final User user, final Team team)
+			throws InvalidHeirachyException {
 		boolean modified = false;
 		try {
 			URL url = new URL(node.getUrl());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					url.openStream(), "UTF-8"));
-		
+
 			String line;
 			StringBuffer html = new StringBuffer();
 			while ((line = reader.readLine()) != null) {
 				html.append(line);
 			}
 			reader.close();
-			
-			Pattern canonicalRgx = Pattern.compile("<\\s*link\\s*rel\\s*=\\s*\"canonical\"[^>]*>",
+
+			Pattern canonicalRgx = Pattern.compile(
+					"<\\s*link\\s*rel\\s*=\\s*\"canonical\"[^>]*>",
 					Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
-			
+
 			Matcher canonicalMatch = canonicalRgx.matcher(html);
 			if (canonicalMatch.find()) {
 				Pattern hrefRgx = Pattern.compile("href\\s*=\\s*\"[^\"]*\"",
@@ -129,12 +135,15 @@ public class NodeDao {
 						final String canUrl = urlMatch.group().substring(1);
 						if (!canUrl.equals(node.getUrl())) {
 							Node existing = getByUrl(canUrl);
-							
+
 							if (existing != null) {
 								node.setRedirectId(existing.getId());
-								long parentId = node.getParents().iterator().next();
+								long parentId = node.getParents().iterator()
+										.next();
 								if (!existing.getParents().contains(parentId)) {
-									doAction(existing, user, team, ActionType.LINK, Vote.UP, get(parentId), false);	
+									doAction(existing, user, team,
+											ActionType.LINK, Vote.UP,
+											get(parentId), false);
 								}
 								ofy().save().entities(node);
 								return;
@@ -145,19 +154,42 @@ public class NodeDao {
 					}
 				}
 			}
-			
-			Pattern titleRgx = Pattern.compile("<\\s*(title)\\s*>[^<]*<\\s*/",
+
+			Pattern openGraphTitleRgx = Pattern.compile(
+					"<\\s*meta\\s*property\\s*=\\s*\"og:title\"[^>]*>",
 					Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
-			
-			Matcher matcher = titleRgx.matcher(html);
-			if (matcher.find()) {
-				Pattern innerRgx = Pattern.compile(">[^<]*",
+
+			Matcher ogTMatch = openGraphTitleRgx.matcher(html);
+			if (ogTMatch.find()) {
+				Pattern contentRgx = Pattern.compile(
+						"content\\s*=\\s*\"[^\"]*\"", Pattern.CASE_INSENSITIVE
+								& Pattern.MULTILINE);
+				Matcher contentMatch = contentRgx.matcher(ogTMatch.group());
+				if (contentMatch.find()) {
+					Pattern titleRgx = Pattern.compile("\"[^\"]*",
+							Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+					Matcher titleMatch = titleRgx.matcher(contentMatch.group());
+					if (titleMatch.find()) {
+						final String title = titleMatch.group().substring(1);
+						node.setTitle(title);
+						modified = true;
+					}
+				}
+			} else {
+	
+				Pattern titleRgx = Pattern.compile("<\\s*(title)\\s*>[^<]*<\\s*/",
 						Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
-				Matcher inner = innerRgx.matcher(matcher.group());
-				inner.find();
-				node.setTitle(inner.group().substring(1));
-				modified = true;
-			} 
+	
+				Matcher matcher = titleRgx.matcher(html);
+				if (matcher.find()) {
+					Pattern innerRgx = Pattern.compile(">[^<]*",
+							Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+					Matcher inner = innerRgx.matcher(matcher.group());
+					inner.find();
+					node.setTitle(inner.group().substring(1));
+					modified = true;
+				}
+			}
 
 		} catch (MalformedURLException e) {
 
@@ -171,7 +203,8 @@ public class NodeDao {
 	}
 
 	private Node getByUrl(final String url) {
-		Ref<Node> ref = ofy().load().type(Node.class).filter("url =", url).limit(1).first();
+		Ref<Node> ref = ofy().load().type(Node.class).filter("url =", url)
+				.limit(1).first();
 		if (ref == null) {
 			return null;
 		} else {
@@ -190,8 +223,8 @@ public class NodeDao {
 	}
 
 	public Node doAction(Node node, final User user, final Team team,
-			final ActionType actionType, final Vote vote, final Node parent, final boolean ignore)
-			throws InvalidHeirachyException {
+			final ActionType actionType, final Vote vote, final Node parent,
+			final boolean ignore) throws InvalidHeirachyException {
 		if ((!ignore) && (team.doAction(node, user, actionType, vote, parent))) {
 			ofy().save().entity(node);
 			if (parent != null) {
@@ -208,7 +241,8 @@ public class NodeDao {
 
 	public void updateNodeRanks() {
 		QueryResultIterator<Node> iter = ofy().load().type(Node.class)
-				.filter("nextCalculationTime < ", System.currentTimeMillis()).iterator();
+				.filter("nextCalculationTime < ", System.currentTimeMillis())
+				.iterator();
 
 		final Set<Node> toSave = new HashSet<Node>();
 		while (iter.hasNext()) {
@@ -221,7 +255,20 @@ public class NodeDao {
 	}
 
 	public Collection<Node> getChildren(long id, int offset, int limit) {
-		return ofy().load().type(Node.class).filter("parents", id).filter("redirect", false).order("-weightedWilsonScore").order("-reset").offset(offset).limit(limit).list();
+		return ofy().load().type(Node.class).filter("parents", id)
+				.filter("redirect", false).order("-weightedWilsonScore")
+				.order("-reset").offset(offset).limit(limit).list();
+	}
+
+	public void normalizeAll(User user, Team team) throws InvalidHeirachyException {
+		QueryResultIterator<Node> iter = ofy().load().type(Node.class).iterator();
+		while (iter.hasNext()) {
+			Node node = iter.next();
+			if (node.getUrl() != null) {
+				normalizeNode(node, user, team);
+			}
+		}
+		
 	}
 
 }

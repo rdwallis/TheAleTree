@@ -5,7 +5,7 @@ body, table td, select, button {
 body {
   color: black;
   border: 0;
-  margin: 1em 2em;
+  margin: 1em 2em 15em 2em;
   background: #fff;
   direction: ltr;
 }
@@ -220,3 +220,8 @@ input[type="submit"]:active {
 	border-radius: 0.5em;
 }
 
+img.load {
+	width: 3em;
+	height: 1em;
+	padding-top: 0.5em;
+}

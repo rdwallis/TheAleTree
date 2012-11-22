@@ -18,6 +18,7 @@
 
 	<static-files>
 		<include path="/**.html" expiration="1d" />
+		<include path="/**.gif" expiration="365d" />
 		<include path="/**.png" expiration="365d" />
 		<include path="/**.svg" expiration="365d" />
 	</static-files>
