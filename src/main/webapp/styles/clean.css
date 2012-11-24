@@ -5,7 +5,7 @@ body, table td, select, button {
 body {
   color: black;
   border: 0;
-  margin: 1em 2em 15em 2em;
+  margin: 1em 2em 6em 2em;
   background: #fff;
   direction: ltr;
 }
@@ -131,7 +131,7 @@ table {
 	width: 0.8em;
 	height: 1em;
 	vertical-align: text-top;
-	margin-top: 0.2em;
+	margin-top: 0.27em;
 	margin-right: 0.2em;
 }
 

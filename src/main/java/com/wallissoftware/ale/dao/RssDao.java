@@ -67,28 +67,32 @@ public class RssDao {
 				toSave.add(rss);
 				rss.setLastUpdated(System.currentTimeMillis());
 				List<RssItemBean> items = parser.load(rss.getUrl()).getItems();
-				RssItemBean item = items.get(random.nextInt(Math.min(5, items.size())));
-				final Date created = item.getPubDate();
-				if (System.currentTimeMillis() - created.getTime() > 86400000) {
-					break;
+				RssItemBean item = items.get(random.nextInt(Math.min(5,
+						items.size())));
+				Date created;
+				try {
+					created = item.getPubDate();
+					if (System.currentTimeMillis() - created.getTime() > 86400000) {
+						break;
+					}
+				} catch (Exception e) {
+					created = new Date();
 				}
 				String url = item.getLink();
 				URL u = new URL(url);
 				if (u.getHost().contains("news.google.com")) {
-					String[] params = u.getQuery().split("&");  
-				    Map<String, String> map = new HashMap<String, String>();  
-				    for (String param : params)  
-				    {  
-				        String name = param.split("=")[0];  
-				        String value = param.split("=")[1];  
-				        map.put(name.toLowerCase(), value);  
-				    }
-				    if (map.containsKey("url")) {
-				    	url = map.get("url");
-				    }
+					String[] params = u.getQuery().split("&");
+					Map<String, String> map = new HashMap<String, String>();
+					for (String param : params) {
+						String name = param.split("=")[0];
+						String value = param.split("=")[1];
+						map.put(name.toLowerCase(), value);
+					}
+					if (map.containsKey("url")) {
+						url = map.get("url");
+					}
 				}
-				
-				
+
 				Node node = null;
 				for (String ip : rss.getUsers()) {
 					log.info("From Ip: " + ip);
@@ -99,13 +103,14 @@ public class RssDao {
 					}
 					log.info("Team Assigned: " + team.getId());
 					if (node == null) {
-						node = nodeDao.create(url, null, 0, user, team, false, created);
+						node = nodeDao.create(url, null, 0, user, team, false,
+								created);
 						log.info("Node Created");
 					} else {
 						nodeDao.doAction(node, user, team, ActionType.VOTE,
 								Vote.UP, false);
 					}
-					
+
 				}
 			} catch (Exception e) {
 				log.warning(e.getMessage());

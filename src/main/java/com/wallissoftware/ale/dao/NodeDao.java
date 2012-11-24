@@ -119,7 +119,7 @@ public class NodeDao {
 			reader.close();
 
 			Pattern canonicalRgx = Pattern.compile(
-					"<\\s*link\\s*rel\\s*=\\s*\"canonical\"[^>]*>",
+					"<\\s*link\\s*[^>]*rel\\s*=\\s*\"canonical\"[^>]*>",
 					Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
 
 			Matcher canonicalMatch = canonicalRgx.matcher(html);
@@ -133,30 +133,35 @@ public class NodeDao {
 					Matcher urlMatch = urlRgx.matcher(hrefMatch.group());
 					if (urlMatch.find()) {
 						final String canUrl = urlMatch.group().substring(1);
-						if (!canUrl.equals(node.getUrl())) {
-							Node existing = getByUrl(canUrl);
-
-							if (existing != null) {
-								node.setRedirectId(existing.getId());
-								long parentId = node.getParents().iterator()
-										.next();
-								if (!existing.getParents().contains(parentId)) {
-									doAction(existing, user, team,
-											ActionType.LINK, Vote.UP,
-											get(parentId), false);
+						try {
+							new URL(canUrl);
+							if (!canUrl.equals(node.getUrl())) {
+								Node existing = getByUrl(canUrl);
+	
+								if (existing != null) {
+									node.setRedirectId(existing.getId());
+									long parentId = node.getParents().iterator()
+											.next();
+									if (!existing.getParents().contains(parentId)) {
+										doAction(existing, user, team,
+												ActionType.LINK, Vote.UP,
+												get(parentId), false);
+									}
+									ofy().save().entities(node);
+									return;
 								}
-								ofy().save().entities(node);
-								return;
+								node.setUrl(canUrl);
+								modified = true;
 							}
-							node.setUrl(canUrl);
-							modified = true;
+						} catch (MalformedURLException e) {
+							//Passthrough
 						}
 					}
 				}
 			}
 
 			Pattern openGraphTitleRgx = Pattern.compile(
-					"<\\s*meta\\s*property\\s*=\\s*\"og:title\"[^>]*>",
+					"<\\s*meta[^>]*property\\s*=\\s*\"og:title\"[^>]*>",
 					Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
 
 			Matcher ogTMatch = openGraphTitleRgx.matcher(html);
@@ -195,6 +200,8 @@ public class NodeDao {
 
 		} catch (IOException e) {
 			// ...
+		} catch (Exception e) {
+			
 		}
 		if (modified) {
 			ofy().save().entity(node);

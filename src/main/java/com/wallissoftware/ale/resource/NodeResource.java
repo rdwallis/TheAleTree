@@ -33,7 +33,9 @@ import com.wallissoftware.ale.model.Vote;
 @Singleton
 @Path("/node")
 public class NodeResource {
-
+	
+	private final static String DEFAULT_LIMIT = "6";
+	
 	private final NodeDao nodeDao;
 	private final UserDao userDao;
 	private final TeamDao teamDao;
@@ -98,7 +100,7 @@ public class NodeResource {
 	
 	@GET
 	@Path("/{id}")
-	public View getNodeListView(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue("7") final int limit, @QueryParam("strip") @DefaultValue("false") final boolean strip) {
+	public View getNodeListView(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue(DEFAULT_LIMIT) final int limit, @QueryParam("strip") @DefaultValue("false") final boolean strip) {
 		Map<String, Object> model = getNode(id, offset, limit);
 		model.put("limit", limit);
 		model.put("offset", offset);
@@ -113,7 +115,7 @@ public class NodeResource {
 	@Path("/{id}")
 	@Consumes({"application/json"})
 	@Produces({"application/json"})
-	public Map<String, Object> getNode(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue("7") int limit) {
+	public Map<String, Object> getNode(@PathParam("id") final long id, @QueryParam("offset") @DefaultValue("0") final int offset, @QueryParam("limit") @DefaultValue(DEFAULT_LIMIT) int limit) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("root",nodeDao.get(id));
 		result.put("children", nodeDao.getChildren(id, offset, limit));
