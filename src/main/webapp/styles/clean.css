@@ -63,6 +63,7 @@ table {
 .node {
 	border-bottom: 0.1em solid #ddd;	
 	padding: 1em 0;
+	min-width: 42.5em;
 }
 
 .node .vote .arrow {

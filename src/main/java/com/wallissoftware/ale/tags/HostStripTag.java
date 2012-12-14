@@ -19,7 +19,11 @@ public class HostStripTag extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		JspWriter out = getJspContext().getOut();
 		URL u = new URL(url);
-		out.print(u.getHost());
+		String host = u.getHost();
+		if (host.startsWith("www.")) {
+			host = host.substring(4);
+		}
+		out.print(host);
 		
 	}
 	

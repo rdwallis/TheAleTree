@@ -120,16 +120,16 @@ public class NodeDao {
 
 			Pattern canonicalRgx = Pattern.compile(
 					"<\\s*link\\s*[^>]*rel\\s*=\\s*\"canonical\"[^>]*>",
-					Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
 			Matcher canonicalMatch = canonicalRgx.matcher(html);
 			if (canonicalMatch.find()) {
 				Pattern hrefRgx = Pattern.compile("href\\s*=\\s*\"[^\"]*\"",
-						Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+						Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 				Matcher hrefMatch = hrefRgx.matcher(canonicalMatch.group());
 				if (hrefMatch.find()) {
 					Pattern urlRgx = Pattern.compile("\"[^\"]*",
-							Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+							Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 					Matcher urlMatch = urlRgx.matcher(hrefMatch.group());
 					if (urlMatch.find()) {
 						final String canUrl = urlMatch.group().substring(1);
@@ -137,12 +137,13 @@ public class NodeDao {
 							new URL(canUrl);
 							if (!canUrl.equals(node.getUrl())) {
 								Node existing = getByUrl(canUrl);
-	
+
 								if (existing != null) {
 									node.setRedirectId(existing.getId());
-									long parentId = node.getParents().iterator()
-											.next();
-									if (!existing.getParents().contains(parentId)) {
+									long parentId = node.getParents()
+											.iterator().next();
+									if (!existing.getParents().contains(
+											parentId)) {
 										doAction(existing, user, team,
 												ActionType.LINK, Vote.UP,
 												get(parentId), false);
@@ -154,41 +155,54 @@ public class NodeDao {
 								modified = true;
 							}
 						} catch (MalformedURLException e) {
-							//Passthrough
+							// Passthrough
 						}
 					}
 				}
 			}
+			Pattern headlineRgx = Pattern.compile(
+					"<\\s*meta[^>]*itemprop\\s*=\\s*\"headline\"[^>]*>",
+					Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
-			Pattern openGraphTitleRgx = Pattern.compile(
-					"<\\s*meta[^>]*property\\s*=\\s*\"og:title\"[^>]*>",
-					Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+			Matcher headlineMatch = headlineRgx.matcher(html);
+			String titleMatch = null;
+			if (headlineMatch.find()) {
+				titleMatch = headlineMatch.group();
+			} else {
+				Pattern openGraphTitleRgx = Pattern.compile(
+						"<\\s*meta[^>]*property\\s*=\\s*\"og:title\"[^>]*>",
+						Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 
-			Matcher ogTMatch = openGraphTitleRgx.matcher(html);
-			if (ogTMatch.find()) {
+				Matcher ogTMatch = openGraphTitleRgx.matcher(html);
+				if (ogTMatch.find()) {
+					titleMatch = ogTMatch.group();
+				}
+			}
+			if (titleMatch != null) {
 				Pattern contentRgx = Pattern.compile(
 						"content\\s*=\\s*\"[^\"]*\"", Pattern.CASE_INSENSITIVE
-								& Pattern.MULTILINE);
-				Matcher contentMatch = contentRgx.matcher(ogTMatch.group());
+								| Pattern.MULTILINE);
+				Matcher contentMatch = contentRgx.matcher(titleMatch);
 				if (contentMatch.find()) {
-					Pattern titleRgx = Pattern.compile("\"[^\"]*",
-							Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
-					Matcher titleMatch = titleRgx.matcher(contentMatch.group());
-					if (titleMatch.find()) {
-						final String title = titleMatch.group().substring(1);
+					Pattern contentStringRgx = Pattern.compile("\"[^\"]*",
+							Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+					Matcher contentStringMatch = contentStringRgx.matcher(contentMatch.group());
+					if (contentStringMatch.find()) {
+						final String title = contentStringMatch.group().substring(1);
 						node.setTitle(title);
 						modified = true;
 					}
 				}
 			} else {
-	
-				Pattern titleRgx = Pattern.compile("<\\s*(title)\\s*>[^<]*<\\s*/",
-						Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
-	
+
+				Pattern titleRgx = Pattern.compile(
+						"<\\s*(title)\\s*>[^<]*<\\s*/",
+						Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+
 				Matcher matcher = titleRgx.matcher(html);
 				if (matcher.find()) {
 					Pattern innerRgx = Pattern.compile(">[^<]*",
-							Pattern.CASE_INSENSITIVE & Pattern.MULTILINE);
+							Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 					Matcher inner = innerRgx.matcher(matcher.group());
 					inner.find();
 					node.setTitle(inner.group().substring(1));
@@ -201,7 +215,7 @@ public class NodeDao {
 		} catch (IOException e) {
 			// ...
 		} catch (Exception e) {
-			
+
 		}
 		if (modified) {
 			ofy().save().entity(node);
@@ -267,15 +281,17 @@ public class NodeDao {
 				.order("-reset").offset(offset).limit(limit).list();
 	}
 
-	public void normalizeAll(User user, Team team) throws InvalidHeirachyException {
-		QueryResultIterator<Node> iter = ofy().load().type(Node.class).iterator();
+	public void normalizeAll(User user, Team team)
+			throws InvalidHeirachyException {
+		QueryResultIterator<Node> iter = ofy().load().type(Node.class)
+				.iterator();
 		while (iter.hasNext()) {
 			Node node = iter.next();
 			if (node.getUrl() != null) {
 				normalizeNode(node, user, team);
 			}
 		}
-		
+
 	}
 
 }

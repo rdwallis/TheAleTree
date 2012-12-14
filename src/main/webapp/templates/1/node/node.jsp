@@ -4,7 +4,7 @@
 <c:choose>
 	<c:when test="${node.childCount == 0}">
 	
-		<ex:DisclosureTag href="/1/node/${node.id}/attach" text="Attach A New Branch">
+		<ex:DisclosureTag href="/1/node/${node.id}" text="Attach A New Branch">
 			<c:set var="parentId" value="${node.id}" scope="request" />		
 			<%@ include file="attach/attach.jsp"%>
 		</ex:DisclosureTag>

@@ -3,6 +3,7 @@ package com.wallissoftware.ale.dao;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -56,6 +57,8 @@ public class RssDao {
 	}
 
 	public void updateAll() {
+		Set<String> recentWords = getRecentWords();
+
 		Random random = new Random();
 		final RssParser parser = new RssParser();
 		final QueryResultIterator<Rss> it = ofy().load().type(Rss.class)
@@ -67,8 +70,22 @@ public class RssDao {
 				toSave.add(rss);
 				rss.setLastUpdated(System.currentTimeMillis());
 				List<RssItemBean> items = parser.load(rss.getUrl()).getItems();
-				RssItemBean item = items.get(random.nextInt(Math.min(5,
-						items.size())));
+				RssItemBean item = null;
+				for (int i = 0; i < 5; i++) {
+					item = items.get(random.nextInt(Math.min(5, items.size())));
+					String[] titleWords = item.getTitle().split(" ");
+					boolean similarToOtherStories = false;
+					for (String t: titleWords) {
+						if (recentWords.contains(t)) {
+							similarToOtherStories = true;
+							log.info(item.getTitle() + " contains word: " + t);
+							break;
+						}
+					}
+					if (!similarToOtherStories) {
+						break;
+					}
+				}
 				Date created;
 				try {
 					created = item.getPubDate();
@@ -117,6 +134,20 @@ public class RssDao {
 			}
 		}
 		ofy().save().entities(toSave);
+	}
+
+	private Set<String> getRecentWords() {
+		Set<String> recentWords = new HashSet<String>();
+		Collection<Node> frontPageNodes = nodeDao.getChildren(0, 0, 6);
+		for (Node node : frontPageNodes) {
+			String[] words = node.getTitle().split(" ");
+			for (String w : words) {
+				if (w.length() > 4) {
+					recentWords.add(w);
+				}
+			}
+		}
+		return recentWords;
 	}
 
 }

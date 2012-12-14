@@ -265,6 +265,7 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
@@ -282,6 +283,8 @@
 
 		<!-- Upload to http://test.latest.<applicationName>.appspot.com by default. -->
 		<gae.application.version>1</gae.application.version>
+
+		<github.global.server>github</github.global.server>
 	</properties>
 
 	<profiles>
