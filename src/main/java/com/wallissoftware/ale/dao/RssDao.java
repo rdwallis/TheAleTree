@@ -57,7 +57,7 @@ public class RssDao {
 	}
 
 	public void updateAll() {
-		Set<String> recentWords = getRecentWords();
+		String recentWords = getRecentWords();
 
 		Random random = new Random();
 		final RssParser parser = new RssParser();
@@ -73,18 +73,24 @@ public class RssDao {
 				RssItemBean item = null;
 				for (int i = 0; i < 5; i++) {
 					item = items.get(random.nextInt(Math.min(5, items.size())));
-					String[] titleWords = item.getTitle().split(" ");
-					boolean similarToOtherStories = false;
-					for (String t: titleWords) {
-						if (recentWords.contains(t)) {
-							similarToOtherStories = true;
-							log.info(item.getTitle() + " contains word: " + t);
-							break;
+					String[] titleWords = item.getTitle().replaceAll("\\W", " ").toLowerCase()
+							.split(" ");
+					for (String t : titleWords) {
+						if (t.length() > 4) {
+							if (recentWords.contains(t)) {
+								log.info(item.getTitle() + " contains word: "
+										+ t);
+								item = null;
+								break;
+							}
 						}
 					}
-					if (!similarToOtherStories) {
+					if (item != null) {
 						break;
 					}
+				}
+				if (item == null) {
+					continue;
 				}
 				Date created;
 				try {
@@ -136,18 +142,18 @@ public class RssDao {
 		ofy().save().entities(toSave);
 	}
 
-	private Set<String> getRecentWords() {
-		Set<String> recentWords = new HashSet<String>();
-		Collection<Node> frontPageNodes = nodeDao.getChildren(0, 0, 6);
+	private String getRecentWords() {
+		StringBuilder recentWords = new StringBuilder();
+		Collection<Node> frontPageNodes = nodeDao.getChildren(0, 0, 12);
 		for (Node node : frontPageNodes) {
 			String[] words = node.getTitle().split(" ");
 			for (String w : words) {
 				if (w.length() > 4) {
-					recentWords.add(w);
+					recentWords.append(w.toLowerCase());
 				}
 			}
 		}
-		return recentWords;
+		return recentWords.toString();
 	}
 
 }

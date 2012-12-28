@@ -97,6 +97,10 @@ public class Node {
 		updateWilsonScore();
 		
 	}
+	
+	public String getTitle() {
+		return StringEscapeUtils.escapeHtml4(StringEscapeUtils.unescapeHtml4(title));
+	}
 
 	public String getComment() {
 		if (isComment() && isCachedCommentUpToDate()) {

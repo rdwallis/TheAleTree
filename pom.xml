@@ -152,7 +152,7 @@
 			<artifactId>resteasy-guice</artifactId>
 			<version>2.3.5.Final</version>
 		</dependency>
-
+		
 		<!-- Apache Commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -279,7 +279,7 @@
 		<downloadSources>true</downloadSources>
 
 		<!-- Specify AppEngine version for your project. It should match SDK version pointed to by ${gae.home} property (Typically, one used by your Eclipse plug-in). -->
-		<gae.version>1.7.2</gae.version>
+		<gae.version>1.7.4</gae.version>
 
 		<!-- Upload to http://test.latest.<applicationName>.appspot.com by default. -->
 		<gae.application.version>1</gae.application.version>
