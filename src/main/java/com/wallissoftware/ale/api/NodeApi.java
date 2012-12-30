@@ -15,8 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
-import org.jboss.resteasy.annotations.cache.Cache;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -36,7 +34,7 @@ import com.wallissoftware.ale.model.Vote;
 @Path("/node")
 public class NodeApi {
 
-	private final static String DEFAULT_LIMIT = "12";
+	private final static String DEFAULT_LIMIT = "6";
 
 	private final NodeDao nodeDao;
 	private final UserDao userDao;
@@ -96,10 +94,10 @@ public class NodeApi {
 			@Context final HttpServletRequest req,
 			@QueryParam("ignore") @DefaultValue("false") final boolean ignore)
 			throws InvalidNodeException, InvalidHeirachyException {
-		if (url.isEmpty()) {
+		if ((url != null) && (url.isEmpty())) {
 			url = null;
 		}
-		if (comment.isEmpty()) {
+		if ((comment != null) && (comment.isEmpty())) {
 			comment = null;
 		}
 		final User user = userDao.get(req.getRemoteAddr());
