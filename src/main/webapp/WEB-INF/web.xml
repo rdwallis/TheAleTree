@@ -29,6 +29,19 @@
   		<filter-name>CacheFilter</filter-name>
   		<url-pattern>/*</url-pattern>
 	</filter-mapping> --> 
+	
+	<filter>
+  		<filter-class>com.wallissoftware.ale.filters.LastModifiedFilter</filter-class>
+  		<filter-name>LastModifiedFilter</filter-name>
+  		
+	</filter>
+  
+	<filter-mapping>
+  		<filter-name>LastModifiedFilter</filter-name>
+  		<url-pattern>/</url-pattern>
+  		<url-pattern>/1/*</url-pattern>
+	</filter-mapping>
+	
     
     <filter>
         <filter-name>ObjectifyFilter</filter-name>

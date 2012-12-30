@@ -1,5 +1,6 @@
 package com.wallissoftware.ale.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.OnSave;
 import com.petebevin.markdown.MarkdownProcessor;
 import com.wallissoftware.ale.exceptions.InvalidNodeException;
+import com.wallissoftware.ale.filters.LastModifiedFilter;
 
 @Cache(expirationSeconds=600)
 @Entity
@@ -115,6 +117,7 @@ public class Node {
 			setCachedComment(calcCachedComment());
 			setCachedCommentVersion(CACHED_COMMENT_VERSION);
 		}
+		LastModifiedFilter.setLastModified(new Date());
 	}
 	
 	private boolean isComment() {
