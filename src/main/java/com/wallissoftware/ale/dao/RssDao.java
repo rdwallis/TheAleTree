@@ -71,27 +71,23 @@ public class RssDao {
 				rss.setLastUpdated(System.currentTimeMillis());
 				List<RssItemBean> items = parser.load(rss.getUrl()).getItems();
 				RssItemBean item = null;
-				for (int i = 0; i < 5; i++) {
-					item = items.get(random.nextInt(Math.min(5, items.size())));
-					String[] titleWords = item.getTitle().replaceAll("\\W", " ").toLowerCase()
-							.split(" ");
-					for (String t : titleWords) {
-						if (t.length() > 4) {
-							if (recentWords.contains(t)) {
-								log.info(item.getTitle() + " contains word: "
-										+ t);
-								item = null;
-								break;
-							}
+
+				item = items.get(random.nextInt(Math.min(5, items.size())));
+				String[] titleWords = item.getTitle().replaceAll("\\W", " ")
+						.toLowerCase().split(" ");
+				for (String t : titleWords) {
+					if (t.length() > 4) {
+						if (recentWords.contains(t)) {
+							log.info(item.getTitle() + " contains word: " + t);
+							item = null;
+							break;
 						}
-					}
-					if (item != null) {
-						break;
 					}
 				}
 				if (item == null) {
 					continue;
 				}
+
 				Date created;
 				try {
 					created = item.getPubDate();
@@ -146,6 +142,9 @@ public class RssDao {
 		StringBuilder recentWords = new StringBuilder();
 		Collection<Node> frontPageNodes = nodeDao.getChildren(0, 0, 12);
 		for (Node node : frontPageNodes) {
+			if (node.getTitle() == null) {
+				continue;
+			}
 			String[] words = node.getTitle().split(" ");
 			for (String w : words) {
 				if (w.length() > 4) {
@@ -153,7 +152,7 @@ public class RssDao {
 				}
 			}
 		}
-		return recentWords.toString();
+		return recentWords.toString() + "packers broncos";
 	}
 
 }

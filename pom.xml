@@ -64,6 +64,18 @@
 			<version>${gae.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-jsr107cache</artifactId>
+			<version>${gae.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.jsr107cache</groupId>
+			<artifactId>jsr107cache</artifactId>
+			<version>1.1</version>
+		</dependency>
+
 		<!-- J2EE Servlet API. We need it to compile IndexServlet class. You can probably remove it, if you don't explicitly use Servlets. -->
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
@@ -152,7 +164,7 @@
 			<artifactId>resteasy-guice</artifactId>
 			<version>2.3.5.Final</version>
 		</dependency>
-		
+
 		<!-- Apache Commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
